@@ -1,32 +1,72 @@
-import React, { useState } from 'react'
-import InputPlace from '../Components/InputPlace'
-import Card from '../Components/Card'
+import React, { useState, useEffect } from 'react';
+import InputPlace from '../Components/InputPlace';
+import List from '../Components/List';
+import { message } from 'antd';
 
 const Home = () => {
-  const [input, setInput] = useState('')
-  const [item, setItem] = useState([])
+  const [input, setInput] = useState('');
+  const [item, setItem] = useState([]);
+  const [editIndex, setEditIndex] = useState(null);
 
-  const handleChange=(e)=>{
-    const {value} = e.target
-    setInput(value)
-  }
+  // Handle input change
+  const handleChange = (e) => {
+    setInput(e.target.value);
+  };
 
-  const handleSubmit = ()=>{
-    setItem((prev)=>{
-      return(
-        [
-          ...prev,
-          item
-        ]
-      )
-    })
-  }
+  // Load from localStorage on mount
+  useEffect(() => {
+    const storedItems = JSON.parse(localStorage.getItem('items')) || [];
+    setItem(storedItems);
+  }, []);
+
+  // Save to localStorage on item change
+  useEffect(() => {
+    localStorage.setItem('items', JSON.stringify(item));
+  }, [item]);
+
+  // Add or update item
+  const handleSubmit = () => {
+    if (input.trim() === '') {
+      message.warning('Please enter a task before submitting!');
+      return;
+    }
+
+    if (editIndex !== null) {
+      // Update existing task
+      setItem((prev) =>
+        prev.map((task, index) => (index === editIndex ? input : task))
+      );
+      setEditIndex(null);
+    } else {
+      // Add new task
+      setItem((prev) => [...prev, input]);
+    }
+
+    setInput('');
+  };
+
+  // Edit selected task
+  const handleEdit = (index) => {
+    setEditIndex(index);
+    setInput(item[index]);
+  };
+
+  // Delete task
+  const handleDelete = (index) => {
+    setItem((prev) => prev.filter((_, i) => i !== index));
+  };
+
   return (
-    <div style={{background: 'linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%)', height:'100vh'}}>
-        <InputPlace inp={input} change={handleChange} submit={handleSubmit}/>
-        <Card data = {item}/>
-    </div>
-  )
-}
+    <div className='ttl'>
+      <InputPlace
+        inp={input}
+        change={handleChange}
+        onAdd={handleSubmit}
+        btnText={editIndex !== null ? 'Update' : 'Add'}
+      />
+      <List data={item} onEdit={handleEdit} onDelete={handleDelete} editIndex={editIndex} />
+  </div>
+  );
+};
 
-export default Home
+export default Home;
