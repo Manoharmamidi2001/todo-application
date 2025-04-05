@@ -12,14 +12,15 @@ const InputPlace = ({ inp, onAdd, change, btnText }) => {
           boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
           borderRadius: '12px',
         }}
+        className='card'
       >
-        <Title level={4} style={{ textAlign: 'center', marginBottom: '20px' }}>
-          Todo List Manager
+        <Title level={4} style={{ textAlign: 'center', marginBottom: '20px', color:'white', fontWeight:'bold' }}>
+          Add Your Items Here
         </Title>
         <Row gutter={12}>
           <Col span={18}>
             <Input
-              placeholder="Enter a task..."
+              placeholder="Enter Item"
               value={inp}
               onChange={change}
               size="large"

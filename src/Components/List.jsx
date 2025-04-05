@@ -15,13 +15,13 @@ const List = ({ data, onEdit, onDelete, editIndex }) => {
         }}
       >
         {data.length === 0 ? (
-          <Text type="secondary">No tasks yet. Add something!</Text>
+          <Text type="secondary">No Items yet. Add something!</Text>
         ) : (
           data.map((item, index) => (
             <div key={index}>
               <Row justify="space-between" align="middle" style={{ padding: '6px 0' }}>
                 <Col>
-                  <Text style={{ fontSize: '15px' }}>{item}</Text>
+                  <Text style={{ fontSize: '15px' }}>{index+1}. {item}</Text>
                 </Col>
                 <Col>
                   <Space size="middle">

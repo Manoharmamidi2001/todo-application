@@ -47,9 +47,15 @@ const Home = () => {
 
   // Edit selected task
   const handleEdit = (index) => {
+  if (editIndex === index) {
+    // Deselect if same item is clicked again
+    setEditIndex(null);
+    setInput('');
+  } else {
     setEditIndex(index);
     setInput(item[index]);
-  };
+  }
+};
 
   // Delete task
   const handleDelete = (index) => {
